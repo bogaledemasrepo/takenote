@@ -4,11 +4,11 @@ import { useRouter } from "expo-router";
 import CustomInput from "@/components/CustomInput";
 import Header from "@/components/Header";
 import BackBtn from "@/components/BackBtn";
-import { useAuth } from "@/hooks/authContext";
 import { getUser } from "@/utils/databases";
+import { useAuth } from "@/hooks/authContext";
 
 const SignUp = () => {
-  const { signUp } = useAuth();
+  const { register } = useAuth();
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
   const [error, setError] = useState("");
@@ -18,11 +18,8 @@ const SignUp = () => {
     if (fullName.trim().length === 0) return setError("Full name is required!");
     if (userName.trim().length === 0) return setError("username is required!");
     let { status, data } = await getUser(userName);
-    console.log(data);
     if (!data) {
-      console.log(fullName, userName, userPassword, "");
-      signUp(fullName, userName, userPassword, "");
-      // router.navigate("/(root)");
+      register(fullName, userName, userPassword, "");
     } else setError("usename reserved...");
   };
   return (

@@ -36,26 +36,29 @@ export async function getAllNotes() {
     return { status: "error", data: [] };
   }
 }
-export async function insertNote(title: string, body: string) {
+export async function insertNote(
+  title: string,
+  body: string,
+  username: string
+) {
   try {
-    const result = await db.runAsync(
-      `INSERT INTO NOTES VALUES('${Date.now().toString()}','${title}','${body}','0')`
+    const result = await db.execAsync(
+      `INSERT INTO NOTES VALUES('${Date.now().toString()}','${title}','${body}','0','${username}')`
     );
-    console.log(result);
     return { status: "success", data: result };
   } catch (error) {
     console.log(error);
     return { status: "error", data: error };
   }
 }
-export async function updateNotes(id: string, title?: string, body?: string) {
+export async function updateNotes(id: number, title?: string, body?: string) {
   let exp = "";
   if (title && body) exp = `TITLE=${title} AND BODY=${body}`;
   else if (title) exp = `TITLE=${title}`;
   else if (body) exp = `BODY=${body}`;
   else exp = "";
   try {
-    const result = await db.runAsync(`UPDATE NOTES SET ${exp} WHERE ID=${id}`);
+    const result = await db.execAsync(`UPDATE NOTES SET ${exp} WHERE ID=${id}`);
     return { status: "success", data: result };
   } catch (error) {
     return { status: "error", data: error };
@@ -63,18 +66,8 @@ export async function updateNotes(id: string, title?: string, body?: string) {
 }
 export async function delateNote(id: string) {
   try {
-    const result = await db.runAsync(`DELETE * FROM NOTES WHERE ID=${id}`);
-    return { status: "success", data: result };
-  } catch (error) {
-    return { status: "error", data: error };
-  }
-}
-
-export async function getNote(id: string) {
-  try {
-    const result = (await db.getFirstAsync(
-      `SELECT * FROM NOTES WHERE ID=${id}`
-    )) as NOTESTYPE[];
+    const result = await db.execAsync(`DELETE FROM NOTES WHERE ID=${id}`);
+    console.log("Deleted");
     return { status: "success", data: result };
   } catch (error) {
     console.log(error);
@@ -82,9 +75,21 @@ export async function getNote(id: string) {
   }
 }
 
+export async function getNote(id: string) {
+  try {
+    const result = (await db.getFirstAsync(
+      `SELECT * FROM NOTES WHERE ID=${id}`
+    )) as NOTESTYPE;
+    return { status: "success", data: result };
+  } catch (error) {
+    console.log(error);
+    return { status: "error", data: null };
+  }
+}
+
 export async function addToFavorite(id: string) {
   try {
-    const result = await db.runAsync(
+    const result = await db.execAsync(
       `UPDATE NOTES SET ISFAVORITE='1' WHERE ID=${id}`
     );
     return { status: "success", data: result };
@@ -96,8 +101,8 @@ export async function addToFavorite(id: string) {
 
 export async function removeFromFavorite(id: string) {
   try {
-    const result = await db.runAsync(
-      `UPDATE NOTES SET ISFAVORITE='1' WHERE ID=${id}`
+    const result = await db.execAsync(
+      `UPDATE NOTES SET ISFAVORITE='0' WHERE ID=${id}`
     );
     return { status: "success", data: result };
   } catch (error) {

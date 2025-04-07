@@ -1,14 +1,14 @@
-import AuthProvider, { useAuth } from "@/hooks/authContext";
 import "./global.css";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator, View } from "react-native";
-import { useEffect, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 import { initDb } from "@/utils/databases";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect, useState } from "react";
+import { Stack } from "expo-router";
+import AuthProvider from "./../hooks/authContext";
+
 export default () => {
-  const { user } = useAuth();
   const [dbInitialised, setDbInitialized] = useState(false);
+
   useEffect(() => {
     function start() {
       initDb()
@@ -18,7 +18,7 @@ export default () => {
         .catch((err) => console.log(err));
     }
     start();
-  }, [user]);
+  }, []);
   if (!dbInitialised) {
     return (
       <View className="flex-1 flex items-center justify-center">
@@ -26,26 +26,14 @@ export default () => {
       </View>
     );
   }
-  if (user) {
-    return (
-      <SafeAreaView className="flex-1">
-        <AuthProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(root)" />
-          </Stack>
-          <StatusBar style="dark" />
-        </AuthProvider>
-      </SafeAreaView>
-    );
-  } else
-    return (
-      <SafeAreaView className="flex-1">
-        <AuthProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-          </Stack>
-          <StatusBar style="dark" />
-        </AuthProvider>
-      </SafeAreaView>
-    );
+  return (
+    <SafeAreaView className="flex-1" style={{ backgroundColor: "#222" }}>
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(root)" />
+        </Stack>
+      </AuthProvider>
+    </SafeAreaView>
+  );
 };

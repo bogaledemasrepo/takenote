@@ -1,5 +1,5 @@
-import { getUser, registerUser } from "@/utils/databases";
 import Storage from "expo-sqlite/kv-store";
+import { getUser, registerUser } from "@/utils/databases";
 import {
   createContext,
   ReactNode,
@@ -7,10 +7,9 @@ import {
   useEffect,
   useState,
 } from "react";
-const ini: string | null = null;
-const AuthCtx = createContext({
-  user: ini,
-  signUp: (
+const AuthContext = createContext({
+  user: "",
+  register: (
     fullname: string,
     username: string,
     password: string,
@@ -27,60 +26,51 @@ const AuthCtx = createContext({
   },
   logout: () => {},
 });
-const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const inival: string | null = null;
-  const [userData, setUserData] = useState(inival) as any;
-  async function signUp(
+export default ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState("");
+  async function register(
     fullname: string,
     username: string,
     password: string,
     profile: string
   ) {
     await registerUser(username, fullname, password, profile);
-    await Storage.setItem(
-      "noteAppUser",
-      JSON.stringify({ username, fullname, password, profile })
-    );
-    setUserData(JSON.stringify({ username, fullname, password, profile }));
+    const u = JSON.stringify({ username, fullname, password, profile });
+    await Storage.setItem("noteAppUser", u);
+    setUser(u);
   }
   async function login(username: string, password: string) {
-    const { status, msg, data } = await getUser(username);
-
+    const { status, msg, data } = (await getUser(username)) as {
+      status: string;
+      msg: string;
+      data: { PASSWORD: string };
+    };
     if (status === "error") return { success: false, msg };
     else if (!data) {
       return { success: false, msg: "User not found ..." };
     } else if (data["PASSWORD"] === password) {
       await Storage.setItem("noteAppUser", JSON.stringify({ ...data }));
-      setUserData(JSON.stringify({ ...data }));
+      setUser(JSON.stringify({ ...data }));
       return { success: true, msg: "" };
     } else return { success: false, msg: "Username name or password error!" };
   }
   async function logout() {
-    console.log("Logout");
     await Storage.removeItemAsync("noteAppUser");
-    setUserData(null);
+    setUser("");
   }
   useEffect(() => {
-    async function getUser() {
-      const user = await Storage.getItem("noteAppUser");
-      if (user) {
-        setUserData(user);
+    async function getUserFromSession() {
+      const resualt = await Storage.getItemAsync("noteAppUser");
+      if (resualt && resualt !== "") {
+        setUser(resualt);
       }
     }
-    getUser();
-  }, [userData]);
+    getUserFromSession();
+  }, [user]);
   return (
-    <AuthCtx.Provider
-      value={{
-        user: userData,
-        signUp,
-        login,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ user, register, login, logout }}>
       {children}
-    </AuthCtx.Provider>
+    </AuthContext.Provider>
   );
 };
-export default AuthProvider;
-export const useAuth = () => useContext(AuthCtx);
+export const useAuth = () => useContext(AuthContext);

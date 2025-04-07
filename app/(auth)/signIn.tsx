@@ -15,7 +15,6 @@ const SignIn = () => {
   const handleSignIn = async () => {
     // await dropTable();
     if (userName.trim().length === 0) return setError("Username is required!");
-    console.log(userName, userPassword);
 
     const { success, msg } = await login(userName, userPassword);
     console.log(success, msg);

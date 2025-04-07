@@ -9,12 +9,13 @@ const NewnoteInput = ({
   onChangeText: (text: string) => void;
 }) => {
   return (
-    <View className="rounded-sm min-h-[70%]">
+    <View className="rounded-sm min-h-[100%] border border-slate-300">
       <TextInput
         multiline
-        className="flex-1 outline-none border border-black/20 flex items-start justify-items-starttext-slate-500"
+        className=" rounded-sm flex items-start justify-start content-start"
         value={value}
         onChangeText={onChangeText}
+        placeholder="Note content..."
       />
     </View>
   );

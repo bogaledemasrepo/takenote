@@ -1,8 +1,10 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Button } from "react-native";
 import React from "react";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/hooks/authContext";
 
 const index = () => {
+  const { user, login, logout, register } = useAuth();
   const router = useRouter();
   return (
     <View className="flex-1 flex items-center justify-center p-8">
@@ -10,6 +12,7 @@ const index = () => {
       <Text className="text-3xl font-bold text-slate-500 mb-4">
         Daily Notes
       </Text>
+
       <TouchableOpacity
         onPress={() => router.navigate("/(auth)/signIn")}
         className="w-full p-4 flex items-center justify-center rounded-lg shadow-sm bg-green-300"

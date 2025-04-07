@@ -12,8 +12,7 @@ const Page = () => {
       const resault = await getAllNotes();
       const { status, data } = resault;
       if (status === "success") {
-        const fdata = data.filter((Item) => Item.ISFAVORITE === "1");
-        setNotes(fdata);
+        setNotes(data);
       }
     };
     fetchNotes();
