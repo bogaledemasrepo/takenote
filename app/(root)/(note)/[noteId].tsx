@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Alert, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import {
   addToFavorite,
@@ -19,9 +19,10 @@ const NoteId = () => {
   const { noteId } = useLocalSearchParams();
   useEffect(() => {
     getNote(`${noteId}`).then((res) => {
+      console.log(res);
       if (res.data) return setNote(res.data);
     });
-  }, [note]);
+  }, []);
   return (
     <View>
       <Header
@@ -49,13 +50,10 @@ const NoteId = () => {
       />
       <View className="p-4">
         <View className="h-[48px] w-[100%] flex flex-row gap-2 justify-end p-2">
-          <TouchableOpacity
-            onPress={() => {
-              router.setParams({ id: noteId });
-              router.navigate("/(root)/newNotes");
-            }}
-          >
-            <MaterialIcons name="edit-document" color={"#777"} size={24} />
+          <TouchableOpacity onPress={() => {}}>
+            <Link href={`./(root)/(note)/${noteId}`}>
+              <MaterialIcons name="edit-document" color={"#777"} size={24} />
+            </Link>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>

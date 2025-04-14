@@ -1,4 +1,4 @@
-import { getAllNotes, getNote, NOTESTYPE } from "@/utils/databases";
+import { getAllNotes, NOTESTYPE } from "@/utils/databases";
 import {
   createContext,
   ReactNode,

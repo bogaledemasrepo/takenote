@@ -41,6 +41,7 @@ export async function insertNote(
   body: string,
   username: string
 ) {
+  console.log(title, body, username);
   try {
     const result = await db.execAsync(
       `INSERT INTO NOTES VALUES('${Date.now().toString()}','${title}','${body}','0','${username}')`
@@ -51,17 +52,16 @@ export async function insertNote(
     return { status: "error", data: error };
   }
 }
-export async function updateNotes(id: number, title?: string, body?: string) {
-  let exp = "";
-  if (title && body) exp = `TITLE=${title} AND BODY=${body}`;
-  else if (title) exp = `TITLE=${title}`;
-  else if (body) exp = `BODY=${body}`;
-  else exp = "";
+export async function updateNotes(id: string, title: string, body: string) {
   try {
-    const result = await db.execAsync(`UPDATE NOTES SET ${exp} WHERE ID=${id}`);
+    console.log(id, title, body, "See hir please");
+    const result = await db.execAsync(
+      `UPDATE NOTES SET TITLE='${title}' AND BODY='${body}'  WHERE ID=${id}`
+    );
     return { status: "success", data: result };
   } catch (error) {
-    return { status: "error", data: error };
+    console.log(error);
+    return { status: "error", data: [] };
   }
 }
 export async function delateNote(id: string) {
@@ -80,6 +80,7 @@ export async function getNote(id: string) {
     const result = (await db.getFirstAsync(
       `SELECT * FROM NOTES WHERE ID=${id}`
     )) as NOTESTYPE;
+    console.log(result);
     return { status: "success", data: result };
   } catch (error) {
     console.log(error);
@@ -143,12 +144,12 @@ export async function getUser(username: string) {
   }
 }
 
-export async function dropTable() {
-  try {
-    const result = await db.execAsync(`DROP TABLE USERS`);
-    return { status: "success", data: result };
-  } catch (error) {
-    console.log(error);
-    return { status: "error", data: [] };
-  }
-}
+// export async function dropTable() {
+//   try {
+//     const result = await db.execAsync(`DROP TABLE USERS`);
+//     return { status: "success", data: result };
+//   } catch (error) {
+//     console.log(error);
+//     return { status: "error", data: [] };
+//   }
+// }

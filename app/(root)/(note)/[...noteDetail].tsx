@@ -1,36 +1,38 @@
-import { View, TextInput } from "react-native";
-import NewnoteInput from "@/components/NewnoteInput";
-import React, { useState } from "react";
+import { View, TextInput, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import { getNote, updateNotes } from "@/utils/databases";
 import Header from "@/components/Header";
+import BackBtn from "@/components/BackBtn";
+import NewnoteInput from "@/components/NewnoteInput";
 import Button from "@/components/Button";
-import { router } from "expo-router";
-import { insertNote } from "@/utils/databases";
-import { useAuth } from "@/hooks/authContext";
-interface NoteType {
-  noteId: number;
-  noteTitle: string;
-  noteBody: string;
-}
-const Newnote = () => {
-  const { user } = useAuth();
-  console.log(user);
+
+const NoteDetailUpdate = () => {
+  const { noteDetail } = useLocalSearchParams();
   const [isSavig, setSaving] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const handlePress = async () => {
-    if (title.trim() === "") {
-    }
     setSaving(true);
-    await insertNote(title, body, JSON.parse(user)["USERNAME"]);
-    setTitle("");
-    setBody("");
+    await updateNotes(noteDetail[2], title, body);
     setSaving(false);
-    router.replace("/(root)/(note)");
+    router.navigate("..");
   };
 
+  useEffect(() => {
+    getNote(`${noteDetail[2]}`).then((res) => {
+      if (res.data?.TITLE) setTitle(res.data.TITLE);
+      if (res.data?.BODY) setBody(res.data.BODY);
+      return;
+    });
+  }, []);
   return (
     <>
-      <Header title={"CREATE NEW NOTE"} />
+      <Header
+        headerLeft={<BackBtn />}
+        title={`UPDATE NOTE`}
+        headerRight={<Text> </Text>}
+      />
       <View className="flex-1  p-4">
         <View className="h-[80%]">
           <View className="flex flex-col ring ring-slate-100 gap-1 my-2">
@@ -52,7 +54,7 @@ const Newnote = () => {
         </View>
         <Button
           disabled={title.trim() === ""}
-          title="Save"
+          title="Update"
           saving={isSavig}
           pressHandler={handlePress}
         />
@@ -61,4 +63,4 @@ const Newnote = () => {
   );
 };
 
-export default Newnote;
+export default NoteDetailUpdate;
