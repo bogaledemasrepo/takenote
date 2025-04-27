@@ -1,31 +1,30 @@
 import { View, TextInput, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
-import { getNote, updateNotes } from "@/utils/databases";
+import { useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import BackBtn from "@/components/BackBtn";
 import NewnoteInput from "@/components/NewnoteInput";
 import Button from "@/components/Button";
+import { useNotes } from "@/hooks/notesContext";
 
 const NoteDetailUpdate = () => {
+  const { notes, updateNote } = useNotes();
   const { noteDetail } = useLocalSearchParams();
   const [isSavig, setSaving] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const handlePress = async () => {
     setSaving(true);
-    await updateNotes(noteDetail[2], title, body);
+    await updateNote(noteDetail[2], title, body);
     setSaving(false);
-    router.navigate("..");
   };
 
   useEffect(() => {
-    getNote(`${noteDetail[2]}`).then((res) => {
-      if (res.data?.TITLE) setTitle(res.data.TITLE);
-      if (res.data?.BODY) setBody(res.data.BODY);
-      return;
-    });
-  }, []);
+    const note = notes.filter((Item) => Item.ID === noteDetail[2])[0];
+    setTitle(note.TITLE);
+    setBody(note.BODY);
+    return;
+  }, [notes]);
   return (
     <>
       <Header

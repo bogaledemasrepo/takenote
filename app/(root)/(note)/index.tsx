@@ -36,7 +36,11 @@ const Page = () => {
         ) : (
           notes.map((Item, index) => {
             return (
-              <Link key={index} href={`./${Item.ID}`} className="w-full my-1">
+              <Link
+                key={index}
+                href={`/(root)/(note)/${Item.ID}`}
+                className="w-full my-1"
+              >
                 <View className="h-[48px] my-1 border border-slate-300 bg-slate-200 flex justify-center px-2 w-full">
                   <Text className="font-bold text-slate-500">{Item.TITLE}</Text>
                 </View>

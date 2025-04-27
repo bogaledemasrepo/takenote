@@ -1,4 +1,4 @@
-import { getAllNotes, NOTESTYPE } from "@/utils/databases";
+import { getAllNotes, insertNote, NOTESTYPE } from "@/utils/databases";
 import {
   createContext,
   ReactNode,
@@ -6,35 +6,34 @@ import {
   useEffect,
   useState,
 } from "react";
-interface newNoteType {
-  id: string;
-  title: string;
-  body: string;
-}
 
 const initial: NOTESTYPE[] = [];
 const NoteContext = createContext({
   notes: initial,
-  addNote: (state: NOTESTYPE) => {},
-  deleteNote: (id: number) => {},
-  searchNotes: (text: string) => {},
+  addNote: (title: string, body: string, username: string) => {},
+  deleteNote: (id: string) => {},
+  updateNote: (id: string, title: string, body: string): Promise<void> => {
+    return;
+  },
 });
 const NoteProvider = ({ children }: { children: ReactNode }) => {
   const [notes, setNotes] = useState<NOTESTYPE[]>(initial);
-  const addNote = (newNote: NOTESTYPE) => {
-    setNotes((state) => {
-      return [...state, newNote];
-    });
+  const addNote = async (title: string, body: string, username: string) => {
+    await insertNote(title, body, username);
+    const { data } = await getAllNotes();
+    setNotes(data);
   };
 
-  const deleteNote = (id: number) => {
-    setNotes((state) => {
-      const newState = state.filter((Item) => Item.ID === id);
-      return [...newState];
-    });
+  const deleteNote = async (id: string) => {
+    await deleteNote(id);
+    const { data } = await getAllNotes();
+    setNotes(data);
   };
-  const searchNotes = (text: string) => {
-    return notes.filter((Item) => Item.TITLE.includes(text));
+  const updateNote = async (id: string, title: string, body: string) => {
+    await updateNote(id, title, body);
+    const { data } = await getAllNotes();
+    setNotes(data);
+    return 1;
   };
   useEffect(() => {
     async function getNots() {
@@ -44,7 +43,7 @@ const NoteProvider = ({ children }: { children: ReactNode }) => {
     getNots();
   }, [notes]);
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, searchNotes }}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, updateNote }}>
       {children}
     </NoteContext.Provider>
   );

@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
 export interface NOTESTYPE {
-  ID: number;
+  ID: string;
   TITLE: string;
   BODY: string;
   ISFAVORITE: string;
@@ -41,7 +41,6 @@ export async function insertNote(
   body: string,
   username: string
 ) {
-  console.log(title, body, username);
   try {
     const result = await db.execAsync(
       `INSERT INTO NOTES VALUES('${Date.now().toString()}','${title}','${body}','0','${username}')`
@@ -54,11 +53,8 @@ export async function insertNote(
 }
 export async function updateNotes(id: string, title: string, body: string) {
   try {
-    console.log(id, title, body, "See hir please");
-    const result = await db.execAsync(
-      `UPDATE NOTES SET TITLE='${title}' AND BODY='${body}'  WHERE ID=${id}`
-    );
-    return { status: "success", data: result };
+    await db.execAsync(`UPDATE NOTES SET TITLE="${title}"  WHERE ID=${id}`);
+    return { status: "success", data: null };
   } catch (error) {
     console.log(error);
     return { status: "error", data: [] };
