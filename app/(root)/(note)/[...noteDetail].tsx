@@ -24,7 +24,7 @@ const NoteDetailUpdate = () => {
     setTitle(note.TITLE);
     setBody(note.BODY);
     return;
-  }, [notes]);
+  }, []);
   return (
     <>
       <Header
@@ -46,7 +46,9 @@ const NoteDetailUpdate = () => {
             <View style={{ flex: 1 }}>
               <NewnoteInput
                 value={body}
-                onChangeText={(text: string) => setBody(text)}
+                onChangeText={(text) => {
+                  setBody(text);
+                }}
               />
             </View>
           </View>

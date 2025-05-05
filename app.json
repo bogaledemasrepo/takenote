@@ -64,7 +64,7 @@
     },
     "owner": "bogye",
     "build": {
-      "production": {
+      "production-apk": {
         "android": {
           "buildType": "apk"
         }
