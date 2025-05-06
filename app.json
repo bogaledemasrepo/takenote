@@ -16,7 +16,14 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.bogye.takenotes"
+      "package": "com.bogye.takenotes",
+	"build": {
+      "production-apk": {
+        "android": {
+          "buildType": "apk"
+        }
+      }
+    },
     },
     "web": {
       "bundler": "metro",
@@ -63,12 +70,5 @@
       }
     },
     "owner": "bogye",
-    "build": {
-      "production-apk": {
-        "android": {
-          "buildType": "apk"
-        }
-      }
-    }
   }
 }
