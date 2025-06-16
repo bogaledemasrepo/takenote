@@ -17,7 +17,7 @@ const CustomInput = ({
       <Text className="text-xl font-bold text-slate-600">{label}</Text>
       <TextInput
         placeholder={placeholder}
-        className="w-full border border-slate-400 rounded-lg"
+        className="w-full font-semibold text-lg p-3 rounded-sm pl border border-slate-400 text-slate-500"
         onChangeText={(e) => changeHandler(e)}
       />
     </View>

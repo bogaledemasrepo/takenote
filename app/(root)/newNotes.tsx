@@ -1,16 +1,12 @@
 import { View, TextInput } from "react-native";
-import NewnoteInput from "@/components/NewnoteInput";
+import NewnoteInput from "@components/NewnoteInput";
 import React, { useState } from "react";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import { router } from "expo-router";
 import { insertNote } from "@/utils/databases";
 import { useAuth } from "@/hooks/authContext";
-interface NoteType {
-  noteId: number;
-  noteTitle: string;
-  noteBody: string;
-}
+
 const Newnote = () => {
   const { user } = useAuth();
   console.log(user);
@@ -35,7 +31,7 @@ const Newnote = () => {
         <View className="h-[80%]">
           <View className="flex flex-col ring ring-slate-100 gap-1 my-2">
             <TextInput
-              className=" font-semibold text-lg p-3 rounded-sm pl border border-slate-400 text-slate-500"
+              className="font-semibold text-lg p-3 rounded-sm pl border border-slate-400 text-slate-500"
               placeholder="Note title"
               value={title}
               onChangeText={(text) => setTitle(text)}

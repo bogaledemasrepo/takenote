@@ -6,7 +6,7 @@ const SearchInput = () => {
     <View className="flex-1 h-[42px] rounded-sm px-3 ring ring-slate-300 bg-slate-200">
       <TextInput
         autoCorrect={false}
-        className="flex-1 px-2   outline-none text-neutral-400"
+        className="flex-1 px-2 outline-none text-neutral-600"
         placeholder="Search note"
       />
     </View>
