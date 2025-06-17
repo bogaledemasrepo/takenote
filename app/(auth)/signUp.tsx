@@ -29,9 +29,9 @@ const SignUp = () => {
         title="USER SIGN UP"
         headerRight={<Text> </Text>}
       />
-      <View className="flex-1 flex items-center justify-center  p-4">
+       <View className="h-[90%] w-full flex items-center justify-center p-4">
         <ScrollView scrollEnabled alwaysBounceVertical className="w-full">
-          <View className="shadow-sm bg-neutral-300 w-full p-4 rounded-lg">
+          <View className="w-full p-4 rounded-lg">
             <CustomInput
               label="Full name"
               isSecured={false}

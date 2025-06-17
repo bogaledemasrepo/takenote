@@ -1,5 +1,5 @@
 import { View, TextInput } from "react-native";
-import NewnoteInput from "@components/NewnoteInput";
+import NewnoteInput from "@/components/NewnoteInput";
 import React, { useState } from "react";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
@@ -9,7 +9,6 @@ import { useAuth } from "@/hooks/authContext";
 
 const Newnote = () => {
   const { user } = useAuth();
-  console.log(user);
   const [isSavig, setSaving] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -27,7 +26,7 @@ const Newnote = () => {
   return (
     <>
       <Header title={"CREATE NEW NOTE"} />
-      <View className="flex-1  p-4">
+      <View className="flex-1 p-4">
         <View className="h-[80%]">
           <View className="flex flex-col ring ring-slate-100 gap-1 my-2">
             <TextInput

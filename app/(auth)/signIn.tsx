@@ -29,19 +29,19 @@ const SignIn = () => {
         title="USER SIGN IN"
         headerRight={<Text> </Text>}
       />
-      <View className="flex-1 flex items-center justify-center  p-4">
+       <View className="h-[90%] w-full flex items-center justify-center p-4">
         <ScrollView scrollEnabled alwaysBounceVertical className="w-full">
-          <View className="shadow-sm bg-neutral-300 w-full p-4 rounded-lg">
+          <View className="w-full p-4 rounded-lg">
             <CustomInput
-              label="user name"
+              label="User name"
               placeholder="jhon@gmail.com"
               isSecured={false}
-              changeHandler={(e) => {
+              changeHandler={(e: React.SetStateAction<string>) => {
                 setUserName(e);
               }}
             />
             <CustomInput
-              label="password"
+              label="Password"
               isSecured={true}
               changeHandler={(e) => {
                 setUserPassword(e);
@@ -61,16 +61,16 @@ const SignIn = () => {
             <View className="py-4 flex items-center justify-center">
               <TouchableOpacity
                 onPress={() => router.replace("/(auth)/signUp")}
-                className="flex flex-row"
+                className="flex flex-row item-end justify-start"
               >
                 <Text className="text-slate-400">I have not any account?</Text>
-                <Text className="text-xl font-bold text-slate-600">
+                <Text className="text-xl font-bold text-slate-600 px-2">
                   Sign Up
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-        </ScrollView>
+          </ScrollView>
       </View>
     </>
   );
