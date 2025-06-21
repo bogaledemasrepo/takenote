@@ -51,15 +51,21 @@ export async function insertNote(
     return { status: "error", data: error };
   }
 }
-export async function updateNotes(id: string, title: string, body: string) {
+
+
+export async function setNoteAtDb(id: string, title: string, body: string) {
+
   try {
-    await db.execAsync(`UPDATE NOTES SET TITLE="${title}"  WHERE ID=${id}`);
-    return { status: "success", data: null };
+  const result = db.runAsync('UPDATE users SET name = ?, age = ? WHERE id = ?',[title, body, id]);
+    console.log('success',result)
+    return { status: "success"};
   } catch (error) {
     console.log(error);
-    return { status: "error", data: [] };
+    return { status: "error"};
   }
 }
+
+
 export async function delateNote(id: string) {
   try {
     const result = await db.execAsync(`DELETE FROM NOTES WHERE ID=${id}`);
@@ -76,7 +82,6 @@ export async function getNote(id: string) {
     const result = (await db.getFirstAsync(
       `SELECT * FROM NOTES WHERE ID=${id}`
     )) as NOTESTYPE;
-    console.log(result);
     return { status: "success", data: result };
   } catch (error) {
     console.log(error);

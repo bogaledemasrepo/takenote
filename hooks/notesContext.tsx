@@ -1,4 +1,4 @@
-import { getAllNotes, insertNote, NOTESTYPE } from "@/utils/databases";
+import { getAllNotes, insertNote, NOTESTYPE,setNoteAtDb } from "@/utils/databases";
 import {
   createContext,
   ReactNode,
@@ -7,13 +7,20 @@ import {
   useState,
 } from "react";
 
+function delayMe() {
+  setTimeout(() => {
+    return ''
+  }, 300);
+}
 const initial: NOTESTYPE[] = [];
 const NoteContext = createContext({
   notes: initial,
   addNote: (title: string, body: string, username: string) => {},
   deleteNote: (id: string) => {},
-  updateNote: (id: string, title: string, body: string): Promise<void> => {
-    return;
+  updateNote: async (id: string, title: string, body: string): Promise<string> => {
+    delayMe();
+    return '';
+    
   },
 });
 const NoteProvider = ({ children }: { children: ReactNode }) => {
@@ -30,10 +37,12 @@ const NoteProvider = ({ children }: { children: ReactNode }) => {
     setNotes(data);
   };
   const updateNote = async (id: string, title: string, body: string) => {
-    await updateNote(id, title, body);
-    const { data } = await getAllNotes();
-    setNotes(data);
-    return 1;
+    const res = await setNoteAtDb(id,title,body);
+    if(res.status=='success') {
+      const { data } = await getAllNotes();
+      setNotes(data);
+    }
+    return '1';
   };
   useEffect(() => {
     async function getNots() {

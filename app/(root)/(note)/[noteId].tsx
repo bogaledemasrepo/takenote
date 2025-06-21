@@ -18,8 +18,7 @@ const NoteId = () => {
   const [note, setNote] = useState<NOTESTYPE>();
   const { noteId } = useLocalSearchParams();
   useEffect(() => {
-    getNote(`${noteId}`).then((res) => {
-      console.log(res);
+    getNote(`${noteId}`).then((res: { data: any; }) => {
       if (res.data) return setNote(res.data);
     });
   }, []);
@@ -33,7 +32,7 @@ const NoteId = () => {
               note?.ISFAVORITE === "1"
                 ? await removeFromFavorite(`${note?.ID}`)
                 : await addToFavorite(`${note?.ID}`);
-              getNote(`${noteId}`).then((res) => {
+              getNote(`${noteId}`).then((res: { data: any; }) => {
                 if (res.data) return setNote(res.data);
               });
             }}

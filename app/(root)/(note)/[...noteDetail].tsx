@@ -6,6 +6,7 @@ import BackBtn from "@/components/BackBtn";
 import NewnoteInput from "@/components/NewnoteInput";
 import Button from "@/components/Button";
 import { useNotes } from "@/hooks/notesContext";
+import {getNote} from "@/utils/databases";
 
 const NoteDetailUpdate = () => {
   const { notes, updateNote } = useNotes();
@@ -20,11 +21,13 @@ const NoteDetailUpdate = () => {
   };
 
   useEffect(() => {
-    const note = notes.filter((Item) => Item.ID === noteDetail[2])[0];
-    setTitle(note.TITLE);
-    setBody(note.BODY);
+    getNote(noteDetail[2]).then((res: any)=>{
+      const {data}=res;
+      setTitle(data.TITLE);
+      setBody(data.BODY);
+    })
     return;
-  }, []);
+  }, [isSavig]);
   return (
     <>
       <Header
@@ -46,7 +49,7 @@ const NoteDetailUpdate = () => {
             <View style={{ flex: 1 }}>
               <NewnoteInput
                 value={body}
-                onChangeText={(text) => {
+                onChangeText={(text: React.SetStateAction<string>) => {
                   setBody(text);
                 }}
               />
